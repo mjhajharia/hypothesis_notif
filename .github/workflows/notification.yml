@@ -1,0 +1,61 @@
+name: email notification
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    - cron: '* * * * *' #every 5 minutes
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: checkout repo content
+        uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.GH_PAT }}
+          submodules: 'true'
+
+      - name: setup python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9.13' 
+          
+      - name: install python packages
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests feedgen markdown
+          
+      - name: execute py script 
+        env:
+            default_token: ${{ secrets.DEFAULT_TOKEN }}
+            default_smtp_server: ${{ secrets.DEFAULT_SMTP_SERVER }}
+            default_email_sender: ${{ secrets.DEFAULT_EMAIL_SENDER }}
+            default_email_password: ${{ secrets.DEFAULT_EMAIL_PASSWORD }}
+            group_id: ${{ secrets.GROUP_ID }}
+            recipient_email: ${{ secrets.RECIPIENT_EMAIL }}
+            group_name: ${{ secrets.GROUP_NAME }}
+
+        shell: sh
+        run: |
+          git submodule update --recursive
+          python3 custom_notification.py
+
+      - name: commit files
+        run: |
+          cd private_files
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add -A
+          git commit --allow-empty -m "update cache"
+          
+      - name: push changes
+        uses: ad-m/github-push-action@v0.6.0
+        with:
+          github_token: ${{ secrets.GH_PAT }}
+          branch: main 
+          directory: 'private_files'
+          repository: mjhajharia/hypothesis_private
