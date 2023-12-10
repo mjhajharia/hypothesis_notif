@@ -41,7 +41,7 @@ jobs:
 
         shell: sh
         run: |
-          git submodule update --recursive
+          git submodule update --recursive --remote
           python3 custom_notification.py
 
       - name: commit files
