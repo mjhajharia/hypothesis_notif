@@ -166,8 +166,8 @@ class EmailNotifier(Notifier):
             template = 'Annotation (%s) added by %s to %s (%s)\n\nQuote: %s\n\nText: %s\n\n%s\n\nTags: %s'
             payload = template % ( vars['anno_url'], anno.user, anno.uri, anno.doc_title, vars['ingroup'], vars['quote'], anno.text, vars['tags'] )
             message, message2 = self.make_email_msg(payload, anno.uri, anno.user)
-            # self.server.sendmail(self.sender, [self.recipient], message.as_string())
-            # self.server.sendmail(self.sender, [self.recipient2], message2.as_string())
+            self.server.sendmail(self.sender, [self.recipient], message.as_string())
+            self.server.sendmail(self.sender, [self.recipient2], message2.as_string())
         except Exception as e:
             print ( f'{e} {anno.uri} {anno.id} {anno.user}' )
 class RssNotifier(Notifier):
