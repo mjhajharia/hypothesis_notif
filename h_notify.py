@@ -191,7 +191,7 @@ class RssNotifier(Notifier):
         fg.description("Hypothesis notifications for group %s" % groupname)
         fg.link( href='https://mjhajharia.com' )
         fg.language('en')
-        h = Hypothesis(token=self.token, limit=20)
+        h = Hypothesis(token=self.token, limit=200)
         ids = self.data()
         annos = []
         for id in ids:
