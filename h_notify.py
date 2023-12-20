@@ -137,12 +137,13 @@ class SlackNotifier(Notifier):
         except Exception as e:
             print ( f'{e} {anno.uri} {anno.id} {anno.user}' )
 class EmailNotifier(Notifier):
-    def __init__(self, type=None, token=None, pickle=None, smtp=None, sender=None, sender_password=None, recipient=None, notified_ids=None):
+    def __init__(self, type=None, token=None, pickle=None, smtp=None, sender=None, sender_password=None, recipient=None,recipient2=None, notified_ids=None):
         super(EmailNotifier, self).__init__(type=type, token=token, pickle=pickle, notified_ids=notified_ids)
         self.smtp = smtp
         self.sender = sender
         self.sender_password = sender_password
         self.recipient = recipient
+        self.recipient2 = recipient2
         self.server = smtplib.SMTP('%s:587' % self.smtp)
         self.server.ehlo()
         self.server.starttls()
@@ -150,18 +151,23 @@ class EmailNotifier(Notifier):
 
     def make_email_msg(self, text, url, user):
         msg = MIMEText(text, 'plain', 'utf-8')
+        msg2 = MIMEText(text, 'plain', 'utf-8')
         msg['From'] = self.sender
         msg['To'] = self.recipient
         msg['Subject'] = 'Annotation on %s by %s' % (url, user)
-        return msg
+        msg2['From'] = self.sender
+        msg2['To'] = self.recipient2
+        msg2['Subject'] = 'Annotation on %s by %s' % (url, user)
+        return msg, msg2
 
     def notify(self, anno=None, groupname=None):
         try:
             vars = self.make_vars(anno, groupname)
             template = 'Annotation (%s) added by %s to %s (%s)\n\nQuote: %s\n\nText: %s\n\n%s\n\nTags: %s'
             payload = template % ( vars['anno_url'], anno.user, anno.uri, anno.doc_title, vars['ingroup'], vars['quote'], anno.text, vars['tags'] )
-            message = self.make_email_msg(payload, anno.uri, anno.user)
-            self.server.sendmail(self.sender, [self.recipient], message.as_string())
+            message, message2 = self.make_email_msg(payload, anno.uri, anno.user)
+            # self.server.sendmail(self.sender, [self.recipient], message.as_string())
+            # self.server.sendmail(self.sender, [self.recipient2], message2.as_string())
         except Exception as e:
             print ( f'{e} {anno.uri} {anno.id} {anno.user}' )
 class RssNotifier(Notifier):
