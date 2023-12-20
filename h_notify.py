@@ -253,9 +253,9 @@ def notify_email_tag_activity(tag=None, token=None, pickle=None, smtp=None, send
     notifier.notify_facet(facet='tag', value=tag)
     return notified_ids
 
-def notify_email_group_activity(group=None, groupname=None, token=None, pickle=None, smtp=None, sender=None, sender_password=None, recipient=None, notified_ids=None):
+def notify_email_group_activity(group=None, groupname=None, token=None, pickle=None, smtp=None, sender=None, sender_password=None, recipient=None, recipient2=None,notified_ids=None):
     print ('checking group %s for recipient %s' % ( groupname, recipient ) )
-    notifier = EmailNotifier(type='set', token=token, pickle=pickle, smtp=smtp, sender=sender, sender_password=sender_password, recipient=recipient, notified_ids=notified_ids)
+    notifier = EmailNotifier(type='set', token=token, pickle=pickle, smtp=smtp, sender=sender, sender_password=sender_password, recipient=recipient, recipient2=recipient2, notified_ids=notified_ids)
     notifier.notify_facet(facet='group', value=group, groupname=groupname)
     return notified_ids
 
