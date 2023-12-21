@@ -66,7 +66,7 @@ class Notifier(object):
     def notify_facet(self, facet=None, value=None, groupname=None):
         params = {}
         params[facet] = value
-        params['max_results'] = 2
+        params['max_results'] = 200
         h = Hypothesis(token=self.token)
         rows = list(h.search_all(params))
         rows.sort(key=itemgetter('updated'))
