@@ -37,6 +37,7 @@ jobs:
             default_email_password: ${{ secrets.DEFAULT_EMAIL_PASSWORD }}
             group_id: ${{ secrets.GROUP_ID }}
             recipient_email: ${{ secrets.RECIPIENT_EMAIL }}
+            recipient_email2: ${{ secrets.RECIPIENT_EMAIL2 }}
             group_name: ${{ secrets.GROUP_NAME }}
 
         shell: sh
