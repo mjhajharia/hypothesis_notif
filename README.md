@@ -1,4 +1,4 @@
-## Hypothesis Notifications with Github Action
+## Hypothesis Notifications with Github Action 
 
 Private Cache files are stored in a separate repository, which is a submodule here. Otherwise, most of the code here is from [h_notify](https://github.com/judell/h_notify) with minor changes. 
 
